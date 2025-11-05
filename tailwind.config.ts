@@ -9,8 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
-        mono: ['var(--font-geist-mono)', 'monospace'],
+        sans: ["Inter", "Inter Fallback", ...require("tailwindcss/defaultTheme").fontFamily.sans],
       },
       fontWeight: {
         thin: '100',

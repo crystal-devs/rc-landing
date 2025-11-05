@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronRight, ArrowLeft, X, Menu } from 'lucide-react';
+import Link from 'next/link';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -14,76 +15,94 @@ const Navbar = () => {
   // Navigation data
   const navItems = [
     {
-      name: 'Product',
+      name: 'Features',
+      href: '/features',
       hasDropdown: true,
       sections: [
         {
-          title: 'Intelligence',
-          description: 'Game-changing AI for precision selling',
-          icon: '🎯',
+          title: 'Latest Posts',
+          description: 'Read our newest articles',
+          icon: '📝',
         },
         {
-          title: 'Data & Lead Generation',
-          description: 'Rich signals & data to power your pipeline',
+          title: 'Tutorials',
+          description: 'Step-by-step guides',
+          icon: '📚',
+        },
+        {
+          title: 'Case Studies',
+          description: 'Success stories from users',
           icon: '📊',
         },
         {
-          title: 'Multichannel Engagement',
-          description: 'Automated engagement to scale your reach',
-          icon: '💬',
+          title: 'Case Studies',
+          description: 'Success stories from users',
+          icon: '📊',
         },
         {
-          title: 'Deliverability Optimization',
-          description: 'Your mailbox health kit for outreach success',
-          icon: '✉️',
-        },
-      ],
-      rightSection: [
-        {
-          title: 'Duo Copilot',
-          description: 'Just hit play to power your pipeline',
-        },
-        {
-          title: 'Duo Copywriter',
-          description: 'Create hyper-personal first-touches',
-        },
-        {
-          title: 'Duo Inbox',
-          description: 'Send the perfect replies to prospects',
-        },
-        {
-          title: 'Duo Voice',
-          description: 'Stand out with scalable creative outreach',
+          title: 'Case Studies',
+          description: 'Success stories from users',
+          icon: '📊',
         },
       ],
     },
     {
-      name: 'Why us',
+      name: 'Solutions',
+      href: '/solutions',
       hasDropdown: true,
       sections: [
         {
-          title: 'About Us',
-          description: 'Learn about our mission and values',
-          icon: '🏢',
+          title: 'Latest Posts',
+          description: 'Read our newest articles',
+          icon: '📝',
         },
         {
-          title: 'Success Stories',
-          description: 'See how teams grow with our platform',
-          icon: '⭐',
-        },
-        {
-          title: 'Resources',
-          description: 'Guides, templates, and best practices',
+          title: 'Tutorials',
+          description: 'Step-by-step guides',
           icon: '📚',
+        },
+        {
+          title: 'Case Studies',
+          description: 'Success stories from users',
+          icon: '📊',
         },
       ],
     },
     {
-      name: 'Customers',
+      name: 'Pricing',
+      href: '/pricing',
       hasDropdown: false,
     },
+    // {
+    //   name: 'About',
+    //   href: '/about',
+    //   hasDropdown: false,
+    // },
     {
-      name: 'Pricing',
+      name: 'Blog',
+      href: '/blog',
+      hasDropdown: false,
+      sections: [
+        {
+          title: 'Latest Posts',
+          description: 'Read our newest articles',
+          icon: '📝',
+        },
+        {
+          title: 'Tutorials',
+          description: 'Step-by-step guides',
+          icon: '📚',
+        },
+        {
+          title: 'Case Studies',
+          description: 'Success stories from users',
+          icon: '📊',
+        },
+      ],
+    },
+    {
+      name: 'Contact',
+      href: '/contact',
       hasDropdown: false,
     },
   ];
@@ -134,13 +153,14 @@ const Navbar = () => {
             ? ' w-[calc(100%-1rem)] sm:w-[calc(100%-2rem)] max-w-4xl'
             : ' w-full max-w-7xl'
             }`}
+          transition={{ duration: 0.9 }}
         >
           <motion.nav
             initial={false}
             animate={{
-              backgroundColor: isScrolled ? 'rgba(255, 255, 255, 0.95)' : '',
-              backdropFilter: isScrolled ? 'blur(12px)' : 'blur(0px)',
-              borderRadius: isScrolled ? '10px' : '0px',
+              backgroundColor: isScrolled ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.45)',
+              backdropFilter: isScrolled ? 'blur(12px)' : 'blur(110px)',
+              borderRadius: isScrolled ? '100px' : '100px',
             }}
             transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
             className={`${isScrolled ? 'shadow-lg border border-gray-200' : 'shadow-none'}`}
@@ -148,16 +168,18 @@ const Navbar = () => {
             <div className="p-1 ">
               <div className="flex items-center justify-between">
                 {/* Logo */}
-                <motion.div
-                  className="flex items-center cursor-pointer"
-                >
-                  <div className="flex items-center space-x-2">
-                    <div className="w-7 h-7 sm:w-10 sm:h-10 bg-black rounded-lg flex items-center justify-center">
-                      <span className="text-white font-bold text-xs sm:text-sm">A</span>
+                <Link href="/" passHref>
+                  <motion.div
+                    className="flex items-center cursor-pointer"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 bg-black rounded-full flex items-center justify-center">
+                        <span className="text-white font-bold text-xs sm:text-sm">R</span>
+                      </div>
+                      {/* <span className="text-lg sm:text-xl font-semibold text-gray-900">RC Landing</span> */}
                     </div>
-                    <span className="text-lg sm:text-xl font-semibold text-gray-900">amplemarket</span>
-                  </div>
-                </motion.div>
+                  </motion.div>
+                </Link>
 
                 {/* Desktop Navigation */}
                 <div className="hidden lg:flex items-center space-x-1">
@@ -173,22 +195,33 @@ const Navbar = () => {
                       }}
                       onMouseLeave={handleMouseLeave}
                     >
-                      <motion.button
-                        className={`flex items-center space-x-1 px-3 py-3 rounded-lg text-sm font-medium transition-all focus-none ${activeMenu === item.name
-                          ? 'bg-black text-white'
-                          : 'text-gray-700 hover:bg-black hover:text-white'
-                          }`}
-                      >
-                        <span>{item.name}</span>
-                        {item.hasDropdown && (
+                      {item.hasDropdown ? (
+                        <motion.button
+                          className={`flex items-center space-x-1 px-4 py-3 rounded-full text-sm font-medium transition-all focus-none ${activeMenu === item.name
+                            ? 'bg-black text-white'
+                            : 'text-gray-700 hover:bg-black hover:text-white'
+                            }`}
+                        >
+                          <span>{item.name}</span>
                           <motion.div
                             animate={{ rotate: activeMenu === item.name ? 180 : 0 }}
                             transition={{ duration: 0.2 }}
                           >
                             <ChevronDown size={16} />
                           </motion.div>
-                        )}
-                      </motion.button>
+                        </motion.button>
+                      ) : (
+                        <Link href={item.href}>
+                          <motion.button
+                            className={`flex items-center space-x-1 px-4 py-3 rounded-full text-sm font-medium transition-all focus-none ${activeMenu === item.name
+                              ? 'bg-black text-white'
+                              : 'text-gray-700 hover:bg-black hover:text-white'
+                              }`}
+                          >
+                            <span>{item.name}</span>
+                          </motion.button>
+                        </Link>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -200,12 +233,12 @@ const Navbar = () => {
                     whileTap={{ scale: 0.98 }}
                     className="px-3 xl:px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
                   >
-                    Open app
+                    Login
                   </motion.button>
                   <motion.button
-                    className="px-3 xl:px-4 py-3 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800 transition-colors"
+                    className="px-3 xl:px-4 py-3 text-sm font-medium text-white bg-black rounded-full hover:bg-neutral-800 transition-colors"
                   >
-                    Get free trial
+                    Get Started
                   </motion.button>
                 </div>
 
@@ -241,84 +274,38 @@ const Navbar = () => {
                     {navItems
                       .filter((item) => item.name === activeMenu)
                       .map((item) => (
-                        <div key={item.name} className={item.rightSection ? 'grid grid-cols-2 gap-4 xl:gap-6' : ''}>
+                        <div key={item.name}>
                           {/* Left Section */}
                           <div className="space-y-1">
                             {item.sections?.map((section, idx) => (
-                              <motion.div
-                                key={section.title}
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: idx * 0.05, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-                                className="group cursor-pointer p-3 xl:p-4 rounded-lg hover:bg-gray-50 transition-colors"
-                              >
-                                <div className="flex items-start space-x-3">
-                                  {section.icon && <span className="text-xl xl:text-2xl">{section.icon}</span>}
-                                  <div className="flex-1">
-                                    <div className="flex items-center justify-between">
-                                      <h3 className="text-sm font-semibold text-gray-900 group-hover:text-black">
-                                        {section.title}
-                                      </h3>
-                                      <ChevronDown
-                                        size={16}
-                                        className="text-gray-400 transform -rotate-90 opacity-0 group-hover:opacity-100 transition-opacity"
-                                      />
-                                    </div>
-                                    <p className="text-xs xl:text-sm text-gray-600 mt-1">{section.description}</p>
-                                  </div>
-                                </div>
-                              </motion.div>
-                            ))}
-                          </div>
-
-                          {/* Right Section */}
-                          {item.rightSection && (
-                            <div className="space-y-1 border-l border-gray-200 pl-4 xl:pl-6">
-                              {item.rightSection.map((section, idx) => (
+                              <Link href={`${navItems.find(navItem => navItem.name === activeMenu)?.href}#${section.title.toLowerCase().replace(/\s+/g, '-')}`}>
                                 <motion.div
                                   key={section.title}
-                                  initial={{ opacity: 0, x: 20 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  transition={{ delay: idx * 0.05, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+                                  initial={{ opacity: 0, y: -20 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ delay: idx * 0.05, duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
                                   className="group cursor-pointer p-3 xl:p-4 rounded-lg hover:bg-gray-50 transition-colors"
                                 >
-                                  <div className="flex items-center justify-between">
-                                    <div>
-                                      <div className="flex items-center space-x-2">
-                                        <span className="px-2 py-0.5 text-xs font-semibold text-purple-600 bg-purple-100 rounded">
-                                          DUO
-                                        </span>
+                                  <div className="flex items-start space-x-3">
+                                    {section.icon && <span className="text-xl xl:text-2xl">{section.icon}</span>}
+                                    <div className="flex-1">
+                                      <div className="flex items-center justify-between">
                                         <h3 className="text-sm font-semibold text-gray-900 group-hover:text-black">
-                                          {section.title.replace('Duo ', '')}
+                                          {section.title}
                                         </h3>
+                                        <ChevronDown
+                                          size={16}
+                                          className="text-gray-400 transform -rotate-90 opacity-0 group-hover:opacity-100 transition-opacity"
+                                        />
                                       </div>
                                       <p className="text-xs xl:text-sm text-gray-600 mt-1">{section.description}</p>
                                     </div>
-                                    <ChevronDown
-                                      size={16}
-                                      className="text-gray-400 transform -rotate-90 opacity-0 group-hover:opacity-100 transition-opacity"
-                                    />
                                   </div>
                                 </motion.div>
-                              ))}
+                              </Link>
+                            ))}
+                          </div>
 
-                              {/* Watch Demo */}
-                              <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.3, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-                                className="mt-4 xl:mt-6 p-3 xl:p-4 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 transition-colors"
-                              >
-                                <div className="flex items-center space-x-3">
-                                  <div className="w-10 h-10 bg-gray-300 rounded-full" />
-                                  <div>
-                                    <h4 className="text-sm font-semibold text-gray-900">Watch Demo</h4>
-                                    <p className="text-xs text-gray-600">Get an inside look at AM's features!</p>
-                                  </div>
-                                </div>
-                              </motion.div>
-                            </div>
-                          )}
                         </div>
                       ))}
                   </div>
@@ -343,10 +330,10 @@ const Navbar = () => {
             {/* Header */}
             <div className="flex items-center justify-between px-5 sm:px-6 h-20 border-b border-gray-200 flex-shrink-0">
               <div className="flex items-center space-x-2">
-                <div className="w-7 h-7 sm:w-8 sm:h-8 bg-black rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-xs sm:text-sm">A</span>
+                <div className="w-8 h-8 sm:w-8 sm:h-8 bg-black rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold text-xs sm:text-sm">R</span>
                 </div>
-                <span className="text-lg sm:text-xl font-semibold text-gray-900">amplemarket</span>
+                <span className="text-lg sm:text-xl font-semibold text-gray-900">RC Landing</span>
               </div>
               <button
                 onClick={() => setMobileMenuOpen(false)}
@@ -385,9 +372,11 @@ const Navbar = () => {
                               <ChevronRight size={18} className="text-gray-400 group-hover:text-gray-600 transition-colors" />
                             </button>
                           ) : (
-                            <button className="w-full px-4 py-3 text-left text-[15px] sm:text-[16px] font-medium text-gray-900 hover:bg-gray-50 rounded-lg transition-colors">
-                              {item.name}
-                            </button>
+                            <Link href={item.href} onClick={() => setMobileMenuOpen(false)}>
+                              <button className="w-full px-4 py-3 text-left text-[15px] sm:text-[16px] font-medium text-gray-900 hover:bg-gray-50 rounded-lg transition-colors">
+                                {item.name}
+                              </button>
+                            </Link>
                           )}
                         </motion.div>
                       ))}
@@ -396,8 +385,8 @@ const Navbar = () => {
 
                   {/* Bottom CTA */}
                   <div className="px-5 sm:px-6 pb-5 border-t border-gray-200 space-y-3 flex-shrink-0">
-                    <button className="w-full px-4 py-3 text-sm font-medium text-white bg-black rounded-xl hover:bg-gray-800 transition-colors">
-                      Get a demo
+                    <button className="w-full px-4 py-3 text-sm font-medium text-white bg-black rounded-full hover:bg-gray-800 transition-colors">
+                      Get Started
                     </button>
                     <button className="w-full px-4 py-3 text-sm font-medium text-gray-900 hover:bg-gray-50 rounded-xl transition-colors border border-gray-200">
                       Login
@@ -437,65 +426,31 @@ const Navbar = () => {
                                 Platform
                               </h3>
                               {item.sections.map((section, index) => (
-                                <motion.button
-                                  key={section.title}
-                                  initial={{ opacity: 0, y: 10 }}
-                                  animate={{ opacity: 1, y: 0 }}
-                                  transition={{ delay: index * 0.04, duration: 0.2 }}
-                                  className="w-full flex items-start space-x-3 p-3 sm:p-4 rounded-lg hover:bg-gray-50 transition-colors text-left"
-                                >
-                                  <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg flex items-center justify-center text-lg sm:text-xl border border-gray-100">
-                                    {section.icon}
-                                  </div>
-                                  <div className="flex-1 min-w-0">
-                                    <h4 className="text-sm sm:text-base font-semibold text-gray-900 mb-0.5">
-                                      {section.title}
-                                    </h4>
-                                    <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                                      {section.description}
-                                    </p>
-                                  </div>
-                                </motion.button>
+                                <Link href={`${navItems.find(navItem => navItem.name === mobileSubmenuOpen)?.href}#${section.title.toLowerCase().replace(/\s+/g, '-')}`} onClick={() => setMobileMenuOpen(false)}>
+                                  <motion.button
+                                    key={section.title}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: index * 0.04, duration: 0.2 }}
+                                    className="w-full flex items-start space-x-3 p-3 sm:p-4 rounded-lg hover:bg-gray-50 transition-colors text-left"
+                                  >
+                                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg flex items-center justify-center text-lg sm:text-xl border border-gray-100">
+                                      {section.icon}
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                      <h4 className="text-sm sm:text-base font-semibold text-gray-900 mb-0.5">
+                                        {section.title}
+                                      </h4>
+                                      <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                                        {section.description}
+                                      </p>
+                                    </div>
+                                  </motion.button>
+                                </Link>
                               ))}
                             </div>
                           )}
 
-                          {/* Solutions Section */}
-                          {item.rightSection && (
-                            <div className="space-y-2">
-                              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-2">
-                                Solutions
-                              </h3>
-                              {item.rightSection.map((section, index) => (
-                                <motion.button
-                                  key={section.title}
-                                  initial={{ opacity: 0, y: 10 }}
-                                  animate={{ opacity: 1, y: 0 }}
-                                  transition={{
-                                    delay:
-                                      (item.sections?.length || 0) * 0.04 + index * 0.04,
-                                    duration: 0.2,
-                                  }}
-                                  className="w-full flex items-start space-x-3 p-3 sm:p-4 rounded-lg hover:bg-gray-50 transition-colors text-left"
-                                >
-                                  <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-indigo-50 to-pink-50 rounded-lg border border-gray-100" />
-                                  <div className="flex-1 min-w-0">
-                                    <div className="flex items-center space-x-2 mb-0.5">
-                                      <span className="px-2 py-0.5 text-xs font-semibold text-purple-600 bg-purple-100 rounded">
-                                        DUO
-                                      </span>
-                                    </div>
-                                    <h4 className="text-sm sm:text-base font-semibold text-gray-900 mb-0.5">
-                                      {section.title}
-                                    </h4>
-                                    <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                                      {section.description}
-                                    </p>
-                                  </div>
-                                </motion.button>
-                              ))}
-                            </div>
-                          )}
                         </div>
                       ))}
                   </div>
