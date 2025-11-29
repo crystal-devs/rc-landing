@@ -1,225 +1,245 @@
 'use client';
 
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
 
-export default function SingleSectionHeroGrid() {
+// Define the grid items with their spans and scatter positions
+const items = [
+  {
+    id: 1,
+    src: 'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=800&q=80',
+    alt: 'Hiker',
+    mobileCol: 'col-span-1',
+    mobileRow: 'row-span-1',
+    desktopCol: 'lg:col-span-1',
+    desktopRow: 'lg:row-span-1',
+    // Mobile scatter (around hero on small screens)
+    mobileScatter: { x: '-25vw', y: '-95vh', rotate: -8, scale: 0.7 },
+    // Desktop scatter (around hero on large screens)
+    desktopScatter: { x: '-15vw', y: '-95vh', rotate: -6, scale: 0.7 },
+  },
+  {
+    id: 2,
+    src: 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=800&q=80',
+    alt: 'Dog',
+    mobileCol: 'col-span-1',
+    mobileRow: 'row-span-2',
+    desktopCol: 'lg:col-span-2',
+    desktopRow: 'lg:row-span-1',
+    mobileScatter: { x: '30vw', y: '-115vh', rotate: 6, scale: 0.6 },
+    desktopScatter: { x: '35vw', y: '-90vh', rotate: 4, scale: 0.7 },
+  },
+  {
+    id: 3,
+    src: 'https://images.unsplash.com/photo-1529139574466-a302c27560a0?auto=format&fit=crop&w=800&q=80',
+    alt: 'Friends',
+    mobileCol: 'col-span-1',
+    mobileRow: 'row-span-2',
+    desktopCol: 'lg:col-span-1',
+    desktopRow: 'lg:row-span-2',
+    mobileScatter: { x: '65vw', y: '-65vh', rotate: -5, scale: 0.8 },
+    desktopScatter: { x: '20vw', y: '-70vh', rotate: -4, scale: 0.7 },
+  },
+  {
+    id: 4,
+    src: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80',
+    alt: 'Travel',
+    mobileCol: 'col-span-1',
+    mobileRow: 'row-span-1',
+    desktopCol: 'lg:col-span-1',
+    desktopRow: 'lg:row-span-1',
+    mobileScatter: { x: '-35vw', y: '-25vh', rotate: 4, scale: 0.8 },
+    desktopScatter: { x: '-15vw', y: '-75vh', rotate: 5, scale: 0.7 },
+  },
+  {
+    id: 5,
+    src: 'https://images.unsplash.com/photo-1567095761054-7a02e69e5c43?auto=format&fit=crop&w=800&q=80',
+    alt: 'Smoothie',
+    mobileCol: 'col-span-1',
+    mobileRow: 'row-span-1',
+    desktopCol: 'lg:col-span-1',
+    desktopRow: 'lg:row-span-1',
+    mobileScatter: { x: '30vw', y: '-15vh', rotate: -6, scale: 0.8 },
+    desktopScatter: { x: '25vw', y: '-55vh', rotate: -5, scale: 0.7 },
+  },
+  {
+    id: 6,
+    src: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80',
+    alt: 'Food',
+    mobileCol: 'col-span-1',
+    mobileRow: 'row-span-1',
+    desktopCol: 'lg:col-span-1',
+    desktopRow: 'lg:row-span-1',
+    mobileScatter: { x: '-30vw', y: '-10vh', rotate: 8, scale: 0.8 },
+    desktopScatter: { x: '-39vw', y: '-55vh', rotate: -3, scale: 0.7 },
+  },
+];
+
+export default function AnimatedPhotoWall() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Track scroll progress for animation
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end'],
+  });
+
+  // "Critically Damped" physics configuration.
+  // stiffness: 150 -> Responsive tracking of scroll.
+  // damping: 25 -> Perfectly balanced friction to prevent ANY bounce/oscillation.
+  // This creates a smooth "hydraulic" feel where it slides to a stop.
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 150,
+    damping: 25,
+    mass: 1,
+    restDelta: 0.001
+  });
+
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br bg-white">
-    {/* <section className="relative overflow-hidden bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50"> */}
-      {/* Background Effect */}
-      <div className="absolute inset-0">
+    <section ref={containerRef} className="relative min-h-[200vh] bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 overflow-hidden">
 
-        <div className="absolute inset-y-3 left-1/2 max-h-[calc(100dvh-40px)] w-[calc(100%-24px)] max-w-screen-2xl -translate-x-1/2 rounded-[2rem] sm:inset-y-5 sm:w-[calc(100%-40px)]" />
+      {/* Background Pattern */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-y-3 left-1/2 w-[calc(100%-24px)] max-w-screen-2xl -translate-x-1/2 rounded-[2rem] border border-white/40 bg-white/30 backdrop-blur-3xl" />
       </div>
 
+      {/* Main content container */}
+      <div className="max-w-7xl mx-auto relative w-full">
 
-      {/* DIV 1: Hero Content */}
-      <div className="max-w-screen-xl mx-auto px-8 md:px-12 xl:px-16 relative z-10 flex min-h-[min(880px,90vh)] flex-col items-center justify-center gap-8 pb-16 pt-32 lg:gap-10 lg:pt-36">
-        {/* Announcement badges */}
-        <motion.div
-          className="flex flex-wrap items-center justify-center gap-2"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.2 }}
-        >
-          <a
-            href="#"
-            className="group inline-flex items-center gap-1 rounded-full bg-gray-100 py-1 pl-4 pr-1 text-sm font-medium text-blue-900/70 ring-1 ring-black/10 transition-all duration-200 hover:gap-2.5 hover:bg-white hover:text-blue-900/90 hover:shadow-sm"
-          >
-            <span>Portrait launches Public Testnet</span>
-            <span className="inline-flex size-6 items-center justify-center rounded-full border border-transparent transition-colors group-hover:border-blue-900/10 group-hover:bg-blue-900/5">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path d="M17 7l-10 10" />
-                <path d="M8 7l9 0l0 9" />
-              </svg>
-            </span>
-          </a>
+        {/* Hero Text Section - Takes 80vh so 20% of grid shows */}
+        <div className="relative z-50 flex flex-col items-center justify-center px-4 text-center" style={{ minHeight: 'calc(100vh - 10vh)' }}>
+          <div className="inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-1.5 text-sm font-medium text-blue-900/80 shadow-sm backdrop-blur-sm mb-8">
+            <span>✨ Portrait launches Public Testnet</span>
+          </div>
 
-          <a
-            href="#"
-            className="group inline-flex items-center gap-1 rounded-full bg-white/60 py-1 pl-1 pr-4 text-sm font-medium text-blue-900/70 ring-1 ring-black/10 transition-all duration-200 hover:gap-2.5 hover:bg-white hover:text-blue-900/90 hover:shadow-sm"
-          >
-            <span className="inline-flex size-6 items-center justify-center rounded-full border border-transparent transition-colors group-hover:border-blue-900/10 group-hover:bg-blue-900/5">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M6 4v16a1 1 0 0 0 1.524.852l13-8a1 1 0 0 0 0-1.704l-13-8a1 1 0 0 0-1.524.852z" />
-              </svg>
-            </span>
-            <span>Discover Portrait in 90s</span>
-          </a>
-        </motion.div>
-
-        {/* Heading */}
-        <motion.div
-          className="flex flex-col items-center gap-6 text-center"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.4 }}
-        >
-          <h1 className="max-w-[18ch] text-balance text-4xl font-medium tracking-tight leading-tight text-black sm:text-5xl md:text-6xl lg:text-7xl">
+          <h1 className="max-w-4xl mx-auto text-4xl md:text-7xl font-medium tracking-tight text-slate-900 mb-8 relative">
             Your{' '}
-            <span className="relative inline-block font-serif text-[1.05em] font-semibold italic">
-              <span className="absolute inset-0 -mx-2 bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 opacity-50 rounded-2xl" />
-              <span className="relative px-2">forever</span>
-            </span>{' '}
-            space for everything you are.
+            <span className="relative inline-block">
+              <span className="italic font-serif text-slate-900 relative z-10">forever</span>
+              {/* Pink curved underline doodle */}
+              <svg className="absolute -bottom-2 left-0 w-full h-8 pointer-events-none" viewBox="0 0 200 20" preserveAspectRatio="none">
+                <path d="M5,15 Q50,5 100,12 T195,10" stroke="#ec4899" strokeWidth="3" fill="none" strokeLinecap="round" opacity="0.7" />
+              </svg>
+            </span>
+            {' '}space for{' '}
+            <span className="relative inline-block">
+              <span className="relative z-10">everything</span>
+              {/* Yellow highlight box doodle */}
+              <svg className="absolute -inset-1 w-[calc(100%+8px)] h-[calc(100%+8px)] pointer-events-none -z-10" viewBox="0 0 200 60" preserveAspectRatio="none">
+                <rect x="2" y="8" width="196" height="44" fill="#fef08a" opacity="0.6" rx="4" />
+              </svg>
+            </span>
+            {' '}you are.
           </h1>
-          <motion.p
-            className="mx-auto max-w-md text-balance text-base text-neutral-900/65 sm:text-lg"
-            // initial={{ opacity: 0, y: 20 }}
-            // animate={{ opacity: 1, y: 0 }}
-            // transition={{ duration: 0.4, delay: 0.8 }}
-          >
+
+          <p className="max-w-lg mx-auto text-base md:text-lg text-slate-600 mb-12">
             More than a link—a decentralized canvas to share your story, your work, and your life—in minutes.
-          </motion.p>
-        </motion.div>
+          </p>
+        </div>
+
+        {/* Grid Section - Pushed down below viewport */}
+        <div className="relative z-20 w-full mx-auto pb-40 flex justify-center">
+
+          {/* Mobile/Tablet: Phone-like container with fixed width */}
+          <div className="lg:hidden relative w-full max-w-[320px] mx-auto">
+            {/* Phone border/frame */}
+            <div className="relative rounded-[2.5rem] border-4 border-neutral-400 bg-neutral-400 shadow-2xl">
+              {/* Grid content */}
+              <div className="relative bg-white rounded-[1.5rem] h-[600px]">
+                <div className="p-4 mt-44">
+                  <div className="grid grid-cols-2 gap-4 auto-rows-[140px]">
+                    {items.map((item) => {
+                      // Transform from scattered position (initial) to grid position (0, 0)
+                      // Using smoothProgress (critically damped spring) for that "drifting" feel
+                      const x = useTransform(smoothProgress, [0, 0.6], [item.mobileScatter.x, '0vw']);
+                      const y = useTransform(smoothProgress, [0, 0.6], [item.mobileScatter.y, '0vh']);
+                      const rotate = useTransform(smoothProgress, [0, 0.6], [item.mobileScatter.rotate, 0]);
+                      const opacity = useTransform(smoothProgress, [0, 0.3], [0.8, 1]);
+                      const scale = useTransform(smoothProgress, [0, 0.6], [item.mobileScatter.scale, 1]);
+
+                      return (
+                        <motion.div
+                          key={`grid-${item.id}`}
+                          className={`relative ${item.mobileCol} ${item.mobileRow}`}
+                          style={{ x, y, rotate, opacity, scale }}
+                        >
+                          <div className="relative flex size-full">
+                            <div className="overflow-hidden relative rounded-2xl p-1 flex flex-1 bg-white shadow-lg">
+                              <Image
+                                src={item.src}
+                                alt={item.alt}
+                                fill
+                                className="select-none rounded-2xl object-cover"
+                                sizes="140px"
+                              />
+                            </div>
+                            <div className="pointer-events-none absolute inset-0 rounded-2xl border border-black/[0.12]" />
+                            <div className="pointer-events-none absolute inset-[1px] rounded-[19px] border-x border-t border-white/20" />
+                          </div>
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop: Desktop-like container */}
+          <div className="hidden lg:block relative w-full max-w-6xl mx-auto">
+            {/* Desktop border/frame */}
+            <div className="relative rounded-[2rem] border border-gray-300 bg-gray-100 shadow-2xl p-1.5">
+              {/* Desktop top bar */}
+              <div className="absolute top-0 left-0 right-0 h-8 bg-gray-200 rounded-t-[2rem] border-b border-gray-300 flex items-center px-4 gap-2">
+                <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                <div className="w-3 h-3 rounded-full bg-green-500"></div>
+              </div>
+
+              {/* Grid content */}
+              <div className="relative bg-white rounded-[1.5rem] mt-8">
+                <div className="p-12 mt-44">
+                  <div className="grid grid-cols-4 gap-6 auto-rows-[200px]">
+                    {items.map((item) => {
+                      // Transform from scattered position (initial) to grid position (0, 0)
+                      // Using smoothProgress (critically damped spring) for that "drifting" feel
+                      const x = useTransform(smoothProgress, [0, 0.6], [item.desktopScatter.x, '0vw']);
+                      const y = useTransform(smoothProgress, [0, 0.6], [item.desktopScatter.y, '0vh']);
+                      const rotate = useTransform(smoothProgress, [0, 0.6], [item.desktopScatter.rotate, 0]);
+                      const scale = useTransform(smoothProgress, [0, 0.6], [item.desktopScatter.scale, 1]);
+
+                      return (
+                        <motion.div
+                          key={`grid-${item.id}`}
+                          className={`relative ${item.desktopCol} ${item.desktopRow}`}
+                          style={{ x, y, rotate, scale }}
+                        >
+                          <div className="relative flex size-full cursor-pointer">
+                            <div className="overflow-hidden relative rounded-3xl p-3 flex flex-1 bg-white shadow-lg transition-shadow hover:shadow-xl">
+                              <Image
+                                src={item.src}
+                                alt={item.alt}
+                                fill
+                                className="select-none rounded-[inherit] object-cover"
+                                sizes="200px"
+                              />
+                            </div>
+                            <div className="pointer-events-none absolute inset-0 rounded-[24px] border border-black/[0.12]" />
+                            <div className="pointer-events-none absolute inset-[1px] rounded-[23px] border-x border-t border-white/20" />
+                          </div>
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
 
-
-      {/* DIV 2: Grid Section */}
-      <div className="relative mx-auto flex w-fit justify-self-center rounded-[2rem] border border-black/15 bg-black/5 p-1 lg:rounded-[1.625rem] lg:p-1.5">
-        {/* Profile Header */}
-        <div className='relative flex max-h-[540px] w-min flex-col gap-6 rounded-[1.75rem] bg-white p-6 [clip-path:polygon(-100vw_calc(0%-3000px),calc(100%+100vw)_calc(0%-3000px),calc(100%+100vw)_100%,_-100vw_100%)] sm:max-h-[650px] sm:gap-12 lg:max-h-[1300px] lg:rounded-[1.25rem] lg:p-12' >
-          <div className="relative inline-grid justify-center xl:auto-rows-[234px] xl:grid-cols-[repeat(4,234px)] lg:auto-rows-[200px] lg:grid-cols-[repeat(4,200px)] lg:grid-rows-none lg:gap-6 sm:auto-rows-[156px] sm:grid-cols-[repeat(2,156px)] sm:gap-5 auto-rows-[122px] grid-cols-[repeat(2,122px)] gap-4">
-            <div className="relative -z-1 rounded-[20px] bg-gray-25 md:rounded-3xl lg:col-span-1 col-span-1 lg:row-span-1 row-span-1 bg-amber-200"></div>
-            <div className="relative -z-1 rounded-[20px] bg-gray-25 md:rounded-3xl lg:col-span-2 col-span-1 lg:row-span-1 row-span-2 bg-red-200"></div>
-            <div className="relative -z-1 rounded-[20px] bg-gray-25 md:rounded-3xl lg:col-span-1 col-span-1 lg:row-span-2 row-span-2 bg-green-200"></div>
-            <div className="relative -z-1 rounded-[20px] bg-gray-25 md:rounded-3xl lg:col-span-1 col-span-1 lg:row-span-1 row-span-1 bg-blue-200"></div>
-            <div className="relative -z-1 rounded-[20px] bg-gray-25 md:rounded-3xl lg:col-span-1 col-span-1 lg:row-span-1 row-span-1 bg-purple-200"></div>
-            <div className="relative -z-1 rounded-[20px] bg-gray-25 md:rounded-3xl lg:col-span-1 col-span-1 lg:row-span-1 row-span-1 bg-orange-200"></div>
-          </div>
-        </div>
-      </div>
-
-
-      <div className="pointer-events-none absolute inset-x-0 bottom-1 top-0 overflow-hidden">
-        <div className="absolute inline-grid justify-center xl:auto-cols-[234px] xl:auto-rows-[234px] lg:auto-cols-[200px] lg:auto-rows-[200px] lg:gap-6 sm:auto-cols-[156px] sm:auto-rows-[156px] sm:gap-5 auto-cols-[122px] auto-rows-[122px] gap-4 -left-12 top-32 lg:left-[calc(50%-min(50vw,800px)+90px)] lg:top-40 lg:-translate-x-1/2">
-          <div
-            className="rounded-[20px] md:rounded-3xl lg:col-span-1 col-span-1 lg:row-span-1 row-span-1"
-            style={{
-              touchAction: "none",
-              transform:
-                "translateX(323px) translateY(767.594px);"
-            }}
-          >
-            <div className="relative flex rounded-[20px] md:rounded-3xl col-span-1 row-span-1 after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:shadow-2xl after:transition-opacity size-full">
-              <div className="relative flex size-full flex-1">
-                <div className="overflow-hidden group relative rounded-[20px] md:rounded-3xl 2xl:p-3 lg:p-2.5 md:p-3 sm:p-2.5 p-1.5 flex flex-1 flex-col items-start gap-5 before:pointer-events-none after:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:shadow-sm before:transition-opacity after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:shadow-xl after:transition-opacity bg-white dark:bg-gray-900 pointer-events-none">
-                  <img
-                    alt="Image"
-                    loading="lazy"
-                    decoding="async"
-                    data-nimg="fill"
-                    className="ease-out-smooth transition-opacity duration-300 select-none rounded-[inherit] object-cover"
-                    src="https://portrait.so/images/home/grid/hiker@2x.jpg"
-                    style={{ position: "absolute", height: "100%", width: "100%", inset: 0, color: "transparent" }}
-                  />
-                </div>
-              </div>
-              <div className="pointer-events-none absolute inset-0 rounded-[20px] border border-black/[0.12] md:rounded-[24px] dark:border-black/[0.13]"></div>
-              <div className="pointer-events-none absolute inset-[1px] rounded-[19px] border-x border-t border-white/20 md:rounded-[23px] dark:border dark:border-white/[0.13]"></div>
-            </div>
-          </div>
-        </div>
-        <div className="absolute inline-grid justify-center xl:auto-cols-[234px] xl:auto-rows-[234px] lg:auto-cols-[200px] lg:auto-rows-[200px] lg:gap-6 sm:auto-cols-[156px] sm:auto-rows-[156px] sm:gap-5 auto-cols-[122px] auto-rows-[122px] gap-4 -left-12 top-[370px] lg:left-[calc(50%-min(50vw,850px)+60px)] lg:top-[520px] lg:-translate-x-1/2">
-          <div
-            className="rounded-[20px] md:rounded-3xl lg:col-span-2 col-span-1 lg:row-span-1 row-span-2"
-            style={{
-              touchAction: "none",
-              transform: "translateX(790px) translateY(407.594px)"
-            }}
-          >
-            <div className="relative flex rounded-[20px] md:rounded-3xl col-span-1 row-span-1 after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:shadow-2xl after:transition-opacity size-full">
-              <div className="relative flex size-full flex-1">
-                <div className="overflow-hidden group relative rounded-[20px] md:rounded-3xl 2xl:p-3 lg:p-2.5 md:p-3 sm:p-2.5 p-1.5 flex flex-1 flex-col items-start gap-5 before:pointer-events-none after:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:shadow-sm before:transition-opacity after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:shadow-xl after:transition-opacity bg-white dark:bg-gray-900 pointer-events-none">
-                  <img
-                    alt="Image"
-                    loading="lazy"
-                    decoding="async"
-                    data-nimg="fill"
-                    className="ease-out-smooth transition-opacity duration-300 select-none rounded-[inherit] object-cover"
-                    src="https://portrait.so/images/home/grid/dog@2x.jpg"
-                    style={{ position: "absolute", height: "100%", width: "100%", inset: 0, color: "transparent" }}
-                  />
-                </div>
-              </div>
-              <div className="pointer-events-none absolute inset-0 rounded-[20px] border border-black/[0.12] md:rounded-[24px] dark:border-black/[0.13]"></div>
-              <div className="pointer-events-none absolute inset-[1px] rounded-[19px] border-x border-t border-white/20 md:rounded-[23px] dark:border dark:border-white/[0.13]"></div>
-            </div>
-          </div>
-        </div>
-
-
-        <div className="absolute inline-grid justify-center xl:auto-cols-[234px] xl:auto-rows-[234px] lg:auto-cols-[200px] lg:auto-rows-[200px] lg:gap-6 sm:auto-cols-[156px] sm:auto-rows-[156px] sm:gap-5 auto-cols-[122px] auto-rows-[122px] gap-4 -right-10 top-0 lg:right-[calc(50%-min(50vw,800px)+52px)] lg:top-5 lg:translate-x-1/2">
-          <div
-            className="rounded-[20px] md:rounded-3xl lg:col-span-1 col-span-1 lg:row-span-2 row-span-2"
-            style={{
-              touchAction: "none",
-              transform: "translateX(-361px) translateY(907.594px)",
-            }}
-          >
-            <div className="relative flex rounded-[20px] md:rounded-3xl col-span-1 row-span-1 after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:shadow-2xl after:transition-opacity size-full">
-              <div className="relative flex size-full flex-1">
-                <div className="overflow-hidden group relative rounded-[20px] md:rounded-3xl 2xl:p-3 lg:p-2.5 md:p-3 sm:p-2.5 p-1.5 flex flex-1 flex-col items-start gap-5 before:pointer-events-none after:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:shadow-sm before:transition-opacity after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:shadow-xl after:transition-opacity bg-white dark:bg-gray-900 pointer-events-none">
-                  <img
-                    alt="Image"
-                    loading="lazy"
-                    decoding="async"
-                    data-nimg="fill"
-                    className="ease-out-smooth transition-opacity duration-300 select-none rounded-[inherit] object-cover"
-                    src="https://portrait.so/images/home/grid/women@2x.jpg"
-                    style={{
-                      position: "absolute",
-                      height: "100%",
-                      width: "100%",
-                      inset: 0,
-                      color: "transparent"
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="pointer-events-none absolute inset-0 rounded-[20px] border border-black/[0.12] md:rounded-[24px] dark:border-black/[0.13]"></div>
-              <div className="pointer-events-none absolute inset-[1px] rounded-[19px] border-x border-t border-white/20 md:rounded-[23px] dark:border dark:border-white/[0.13]"></div>
-            </div>
-          </div>
-        </div>
-
-
-        <div className="absolute inline-grid justify-center xl:auto-cols-[234px] xl:auto-rows-[234px] lg:auto-cols-[200px] lg:auto-rows-[200px] lg:gap-6 sm:auto-cols-[156px] sm:auto-rows-[156px] sm:gap-5 auto-cols-[122px] auto-rows-[122px] gap-4 -left-[50px] top-[550px] sm:top-[600px] lg:left-[calc(50%-min(50vw,800px)+70px)] lg:top-[650px] lg:-translate-x-1/2">
-          <div className="rounded-[20px] md:rounded-3xl lg:col-span-1 col-span-1 lg:row-span-1 row-span-1"
-            style={{
-              touchAction: "none",
-              transform: "translateX(343px) translateY(535.594px);",
-            }}>
-            <div className="relative flex rounded-[20px] md:rounded-3xl col-span-1 row-span-1 after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:shadow-2xl after:transition-opacity size-full">
-              <div className="relative flex size-full flex-1">
-                <div className="overflow-hidden group relative rounded-[20px] md:rounded-3xl 2xl:p-3 lg:p-2.5 md:p-3 sm:p-2.5 p-1.5 flex flex-1 flex-col items-start gap-5 before:pointer-events-none after:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:shadow-sm before:transition-opacity after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:shadow-xl after:transition-opacity bg-white dark:bg-gray-900 pointer-events-none">
-                  <img
-                    alt="Image"
-                    loading="lazy"
-                    decoding="async"
-                    data-nimg="fill"
-                    className="ease-out-smooth transition-opacity duration-300 select-none rounded-[inherit] object-cover"
-                    src="https://portrait.so/images/home/grid/gap-year@2x.jpg"
-                    style={{
-                      position: "absolute",
-                      height: "100%",
-                      width: "100%",
-                      inset: 0,
-                      color: "transparent"
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="pointer-events-none absolute inset-0 rounded-[20px] border border-black/[0.12] md:rounded-[24px] dark:border-black/[0.13]"></div>
-              <div className="pointer-events-none absolute inset-[1px] rounded-[19px] border-x border-t border-white/20 md:rounded-[23px] dark:border dark:border-white/[0.13]"></div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-
-    </section >
+    </section>
   );
 }
